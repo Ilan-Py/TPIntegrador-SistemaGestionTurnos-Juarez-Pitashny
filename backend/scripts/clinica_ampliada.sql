@@ -1,5 +1,6 @@
 -- phpMyAdmin SQL Dump (adaptado)
 -- Base de datos: `clinica` — versión ampliada para TP integrador
+DROP DATABASE IF EXISTS `clinica`;
 
 CREATE DATABASE IF NOT EXISTS `clinica` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `clinica`;
