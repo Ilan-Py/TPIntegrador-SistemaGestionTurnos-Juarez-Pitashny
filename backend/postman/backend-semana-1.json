@@ -1,0 +1,240 @@
+{
+  "info": {
+    "_postman_id": "73c76607-25d6-417d-b43e-f33814e1db00",
+    "name": "TP Integrador - Sistema de Turnos",
+    "description": "## Sistema de Turnos — TP Integrador\n\nEsta colección agrupa los endpoints del backend desarrollado para el **Trabajo Práctico Integrador: Sistema de Turnos**. Cubre el ciclo completo de autenticación y control de acceso de la aplicación, organizado por semana de desarrollo.\n\n### Contenido\n\n**Backend — Semana 1**\n\n| Método | Endpoint | Descripción |\n|--------|----------|-------------|\n| GET | `/health` | Verifica que el servidor esté en línea y operativo. |\n| GET | `/auth/coberturas` | Devuelve el listado de coberturas médicas disponibles. |\n| POST | `/auth/registro` | Registra un nuevo paciente en el sistema. |\n| POST | `/auth/login` | Autentica a un usuario y devuelve un token JWT. |\n| GET | `/auth/perfil` | Obtiene el perfil del usuario autenticado (requiere token). |\n| GET | `/auth/perfil` | Intento de acceso al perfil sin token (caso de error esperado). |\n| GET | `/auth/admin-only` | Ruta protegida que requiere token válido y rol de administrador. |\n\n### Notas\n- El servidor corre localmente en `http://localhost:4000`.\n- Los endpoints protegidos requieren un **Bearer Token** en el header `Authorization`.\n- Los casos con y sin token permiten validar el comportamiento del middleware de autenticación.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47962904",
+    "_collection_link": "https://go.postman.co/collection/47962904-73c76607-25d6-417d-b43e-f33814e1db00?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Backend - Semana 1",
+      "item": [
+        {
+          "name": "Estado de servidor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener coberturas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/auth/coberturas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "coberturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registro paciente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"Juan\",\r\n  \"apellido\": \"Perez\",\r\n  \"dni\": \"12345678\",\r\n  \"email\": \"juan@gmail.com\",\r\n  \"password\": \"password123\",\r\n  \"fecha_nacimiento\": \"1995-06-15\",\r\n  \"id_cobertura\": 1,\r\n  \"telefono\": \"3424123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/auth/registro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "registro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();\r",
+                  "if (res.datos && res.datos.token) {\r",
+                  "    pm.environment.set(\"token\", res.datos.token);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"dni\": \"12345678\",\r\n    \"password\": \"password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Perfil(con token)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/auth/perfil",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "perfil"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Perfil(sin token)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/auth/perfil",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "perfil"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin(requiere token+rol)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/auth/admin-only",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "admin-only"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "## Backend — Semana 1\n\nEsta carpeta agrupa los endpoints desarrollados durante la primera semana del **TP Integrador: Sistema de Turnos**. Cubre el ciclo completo de autenticación y control de acceso de la aplicación, incluyendo:\n\n- **Verificación del servidor** (`GET /health`): comprueba que el backend esté en línea y operativo.\n- **Coberturas médicas** (`GET /auth/coberturas`): devuelve el listado de coberturas disponibles para el registro de pacientes.\n- **Registro de paciente** (`POST /auth/registro`): permite dar de alta un nuevo usuario en el sistema.\n- **Login** (`POST /auth/login`): autentica al usuario y retorna un token JWT para las solicitudes protegidas.\n- **Perfil autenticado** (`GET /auth/perfil` con token): obtiene los datos del usuario actualmente autenticado.\n- **Perfil sin autenticación** (`GET /auth/perfil` sin token): caso de prueba de error esperado al acceder sin credenciales.\n- **Ruta de administrador** (`GET /auth/admin-only`): endpoint protegido que requiere token válido y rol de administrador.\n\n> El servidor corre localmente en `http://localhost:4000`. Asegurarse de que el backend esté levantado antes de ejecutar las solicitudes."
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
