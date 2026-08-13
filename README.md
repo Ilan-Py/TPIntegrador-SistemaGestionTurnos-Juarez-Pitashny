@@ -47,3 +47,5 @@ Cada carpeta tiene su propio README con instrucciones específicas.
 - `GET /auth/admin-only` — prueba de rol admin (protegido)
 - Script de base de datos `backend/scripts/clinica_ampliada.sql`
 - Colección Postman `backend/postman/clinica-semana1.json`
+
+### [Semana 1] — CRUD de sedes, especialidades, coberturas y agenda médica
