@@ -48,4 +48,11 @@ Cada carpeta tiene su propio README con instrucciones específicas.
 - Script de base de datos `backend/scripts/clinica_ampliada.sql`
 - Colección Postman `backend/postman/clinica-semana1.json`
 
-### [Semana 1] — CRUD de sedes, especialidades, coberturas y agenda médica
+### [Semana 2] — CRUD de sedes, especialidades, coberturas y agenda médica
+#### Agregado
+- `GET /sedes` — listado de sedes (protegido, solo rol `admin`)
+- `POST /sedes` — alta de una sede nueva (`nombre`, `direccion`, `telefono`) (protegido, solo rol `admin`)
+- `PUT /sedes/:id` — modificación de una sede existente (protegido, solo rol `admin`)
+- `DELETE /sedes/:id` — baja de una sede (protegido, solo rol `admin`)
+  - Valida que la sede no tenga médicos, operadores ni agenda asociada antes de eliminarla
+  - Si tiene dependencias, responde con error controlado (400) en vez de un error 500

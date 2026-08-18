@@ -20,7 +20,8 @@ backend/
 │   ├── middlewares/
 │   │   └── auth.middleware.js
 │   ├── routes/
-│   │   └── auth.routes.js
+│   │   ├── auth.routes.js
+│   │   └── sede.routes.js
 │   ├── app.js
 │   └── index.js
 ├── .env.example
@@ -34,8 +35,8 @@ backend/
 
 ### 1 — Base de datos
 
-- Encender XAMPP
-- Importar `scripts/clinica_ampliada.sql` en phpMyAdmin
+- Encender XAMPP (o levantar MySQL/MariaDB por otro medio, ej. MySQL Workbench)
+- Importar `scripts/clinica_ampliada.sql` en phpMyAdmin (o ejecutar el script desde Workbench: File > Open SQL Script > Run)
 
 ### 2 — Variables de entorno
 
@@ -75,6 +76,15 @@ Servidor en `http://localhost:4000`
 | GET | /auth/perfil | Perfil del usuario logueado | Token |
 | GET | /auth/admin-only | Prueba de rol admin | Token + rol |
 
+### Semana 1 — CRUD de sedes
+
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| GET | /sedes | Listado de sedes | Token + rol admin |
+| POST | /sedes | Alta de sede (`nombre`, `direccion`, `telefono`) | Token + rol admin |
+| PUT | /sedes/:id | Modificación de una sede existente | Token + rol admin |
+| DELETE | /sedes/:id | Baja de una sede. Valida que no tenga médicos, operadores ni agenda asociada antes de eliminar (si tiene, responde 400 en vez de 500) | Token + rol admin |
+
 ### Formato de respuesta uniforme
 
 ```json
@@ -102,8 +112,22 @@ Flujo recomendado para probar:
 5. `GET /auth/perfil` — con token → 200
 6. `GET /auth/perfil` — sin token → 401
 7. `GET /auth/admin-only` — con token de paciente → 403
+8. `POST /sedes` — con token de admin → 201
+9. `GET /sedes` — con token de admin → 200
+10. `PUT /sedes/:id` — con token de admin → 200
+11. `DELETE /sedes/:id` — sede sin dependencias, con token de admin → 200
+12. `DELETE /sedes/:id` — sede con médicos/agenda asociada, con token de admin → 400 (error controlado)
+13. `GET /sedes` (o cualquier endpoint de sedes) — sin token → 401
+14. `GET /sedes` (o cualquier endpoint de sedes) — con token de paciente → 403
+
 ---
 
 ## Credenciales de prueba
 
-Registrar un usuario con `POST /auth/registro`. Para probar rol admin modificar el campo `rol` directamente en phpMyAdmin.
+Registrar un usuario con `POST /auth/registro`. Para probar rol admin, modificar el campo `rol` directamente en phpMyAdmin (o en MySQL Workbench) con:
+
+```sql
+UPDATE usuario SET rol = 'admin' WHERE id = <id_del_usuario>;
+```
+
+Después del cambio, volver a hacer `POST /auth/login` con ese usuario para generar un token nuevo (el token viejo conserva el rol que tenía al momento de loguearse).
