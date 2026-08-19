@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { listarSedes, darDeAlta, actualizarSede, darDeBaja } = require("../controllers/auth.controller");
+const { listarSedes, darDeAlta, actualizarSede, darDeBaja } = require("../controllers/sede.controller");
 const { verificarToken, verificarRol } = require("../middlewares/auth.middleware");
 
 const router = Router();
