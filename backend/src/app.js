@@ -6,6 +6,7 @@ const cors             = require("cors");
 const authRoutes       = require("./routes/auth.routes");
 const sedeRoutes       = require("./routes/sede.routes");
 const coberturaRoutes  = require("./routes/cobertura.routes");
+const agendaRoutes     = require("./routes/agendas.routes");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/auth",       authRoutes);
 app.use("/sedes",      sedeRoutes);
 app.use("/coberturas", coberturaRoutes);
+app.use("/agendas",   agendaRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ codigo: 200, estado: "ok", datos: { mensaje: "Servidor activo" } }); //puse para verificar el estado del servidor mas facil
