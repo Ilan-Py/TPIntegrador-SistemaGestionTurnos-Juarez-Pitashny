@@ -9,9 +9,11 @@ Backend del TP Integrador de Programación 2. Node.js + Express + MySQL.
 ```
 backend/
 ├── scripts/
-│   └── clinica_ampliada.sql
+│   ├── clinica_ampliada.sql
+│   └── usuarios_prueba.sql
 ├── postman/
-│   └── backend-semana-1.json
+│   ├── backend-semana-1.json
+│   └── backend-semana-2.json
 ├── src/
 │   ├── controllers/
 │   │   ├── auth.controller.js
@@ -118,4 +120,13 @@ Servidor en `http://localhost:4000`
 
 ## Credenciales de prueba
 
-Registrar usuarios con `POST /auth/registro` y modificar el rol en phpMyAdmin para probar distintos accesos.
+Importar `scripts/usuarios_prueba.sql` en phpMyAdmin luego de importar la base principal.
+
+| Rol | DNI | Contraseña |
+|-----|-----|------------|
+| administrador | 00000001 | password123 |
+| medico | 00000002 | password123 |
+| operador | 00000003 | password123 |
+| paciente | 00000004 | password123 |
+
+La colección de Postman `backend/postman/backend-semana-2.json` incluye los 4 logins listos para usar.

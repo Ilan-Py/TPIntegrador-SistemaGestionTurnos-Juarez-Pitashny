@@ -28,9 +28,30 @@ Cada carpeta tiene su propio README con instrucciones específicas.
 - JWT — autenticación
 - bcrypt — hash de contraseñas
 
+**Frontend** *(próxima etapa)*
+- Angular 21
+- Angular Material
+
 ---
 
 ## Changelog
+
+### [Semana 2] — Backend: CRUD de sedes, especialidades, coberturas y agenda
+#### Agregado
+- CRUD completo de sedes — solo rol `administrador`
+  - Validación antes de eliminar: no puede tener usuarios ni agenda asociada
+- CRUD completo de especialidades — solo rol `administrador`
+  - Validación antes de eliminar: no puede tener médicos asociados en `medico_especialidad`
+- CRUD completo de coberturas — solo rol `administrador`
+  - Validación antes de eliminar: no puede tener usuarios asociados
+  - Endpoint público `GET /coberturas/public` reutilizable desde el registro de pacientes
+- CRUD completo de agenda médica — roles `medico`, `operador`, `administrador`
+  - El médico solo puede gestionar su propia agenda
+  - El operador puede gestionar la agenda de cualquier médico y sede
+  - El paciente no tiene acceso
+  - Listado filtrable por médico, sede y fecha
+- Script de usuarios de prueba `backend/scripts/usuarios_prueba.sql`
+- Colección Postman `backend/postman/backend-semana-2.json`
 
 ### [Semana 1] — Backend: Setup y autenticación
 #### Agregado
@@ -44,15 +65,5 @@ Cada carpeta tiene su propio README con instrucciones específicas.
 - `POST /auth/registro` — registro de paciente con bcrypt
 - `POST /auth/login` — login por DNI, devuelve JWT
 - `GET /auth/perfil` — datos del usuario logueado (protegido)
-- `GET /auth/admin-only` — prueba de rol admin (protegido)
 - Script de base de datos `backend/scripts/clinica_ampliada.sql`
-- Colección Postman `backend/postman/clinica-semana1.json`
-
-### [Semana 2] — CRUD de sedes, especialidades, coberturas y agenda médica
-#### Agregado
-- `GET /sedes` — listado de sedes (protegido, solo rol `admin`)
-- `POST /sedes` — alta de una sede nueva (`nombre`, `direccion`, `telefono`) (protegido, solo rol `admin`)
-- `PUT /sedes/:id` — modificación de una sede existente (protegido, solo rol `admin`)
-- `DELETE /sedes/:id` — baja de una sede (protegido, solo rol `admin`)
-  - Valida que la sede no tenga médicos, operadores ni agenda asociada antes de eliminarla
-  - Si tiene dependencias, responde con error controlado (400) en vez de un error 500
+- Colección Postman `backend/postman/backend-semana-1.json`

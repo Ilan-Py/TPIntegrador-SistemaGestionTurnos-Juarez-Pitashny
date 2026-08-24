@@ -1,0 +1,920 @@
+{
+  "info": {
+    "_postman_id": "04ffbe26-992c-4da0-9ef8-411b9cdbd409",
+    "name": "TP Integrador - Backend Semana 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47962904",
+    "_collection_link": "https://go.postman.co/collection/47962904-04ffbe26-992c-4da0-9ef8-411b9cdbd409?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "LOGIN",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.datos && res.datos.token) {",
+                  "    pm.environment.set('token', res.datos.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dni\": \"00000001\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Medico",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.datos && res.datos.token) {",
+                  "    pm.environment.set('token', res.datos.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dni\": \"00000002\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.datos && res.datos.token) {",
+                  "    pm.environment.set('token', res.datos.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dni\": \"00000003\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Paciente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.datos && res.datos.token) {",
+                  "    pm.environment.set('token', res.datos.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dni\": \"00000004\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "SEDES",
+      "item": [
+        {
+          "name": "Listar sedes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));\r\npm.test('Devuelve array', () => pm.expect(pm.response.json().datos).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/sedes",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear sede",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sede Sur\",\n  \"direccion\": \"Av. Sur 789\",\n  \"telefono\": \"3424000003\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/sedes",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar sede",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sede Sur Actualizada\",\n  \"direccion\": \"Av. Sur 999\",\n  \"telefono\": \"3424000099\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/sedes/3",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "sedes",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar sede (sin dependencias)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/sedes/3",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "sedes",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar sede con dependencias (espera 400)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/sedes/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "sedes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Acceso sin rol admin (espera 403)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/sedes",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ESPECIALIDADES",
+      "item": [
+        {
+          "name": "Listar especialidades",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/especialidades",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "especialidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear especialidad",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Cardiologia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/especialidades",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "especialidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar especialidad",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Cardiologia Actualizada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/especialidades/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "especialidades",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar especialidad (sin dependencias)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/especialidades/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "especialidades",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar especialidad con medicos (espera 400)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/especialidades/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "especialidades",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "COBERTURAS",
+      "item": [
+        {
+          "name": "Listar coberturas publico (sin token)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:4000/coberturas/public",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "coberturas",
+                "public"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar coberturas (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/coberturas",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "coberturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear cobertura",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"OSDE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/coberturas",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "coberturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar cobertura",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"OSDE Actualizado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/coberturas/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "coberturas",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cobertura (sin usuarios)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/coberturas/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "coberturas",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cobertura con usuarios (espera 400)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/coberturas/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "coberturas",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AGENDAS",
+      "item": [
+        {
+          "name": "Listar agendas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/agendas",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "agendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar agendas filtrada por medico",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/agendas?id_medico=3",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "agendas"
+              ],
+              "query": [
+                {
+                  "key": "id_medico",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar agendas filtrada por sede y fecha",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/agendas?id_sede=1&fecha=2025-10-20",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "agendas"
+              ],
+              "query": [
+                {
+                  "key": "id_sede",
+                  "value": "1"
+                },
+                {
+                  "key": "fecha",
+                  "value": "2025-10-20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear turno de agenda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hora_entrada\": \"09:00\",\n  \"hora_salida\": \"13:00\",\n  \"fecha\": \"2025-11-15\",\n  \"id_medico\": 3,\n  \"id_especialidad\": 1,\n  \"id_sede\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/agendas",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "agendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar turno de agenda",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hora_entrada\": \"10:00\",\n  \"hora_salida\": \"14:00\",\n  \"fecha\": \"2025-11-15\",\n  \"id_medico\": 3,\n  \"id_especialidad\": 1,\n  \"id_sede\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/agendas/3",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "agendas",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar turno de agenda",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/agendas/3",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "agendas",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Acceso paciente a agendas (espera 403)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/agendas",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "agendas"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
