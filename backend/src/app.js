@@ -8,6 +8,7 @@ const sedeRoutes           = require("./routes/sede.routes");
 const coberturaRoutes      = require("./routes/cobertura.routes");
 const agendaRoutes         = require("./routes/agendas.routes");
 const especialidadRoutes   = require("./routes/especialidad.routes");
+const turnoRoutes          = require("./routes/turnos.routes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/sedes",         sedeRoutes);
 app.use("/coberturas",    coberturaRoutes);
 app.use("/agendas",       agendaRoutes);
 app.use("/especialidades", especialidadRoutes);
+app.use("/turnos",        turnoRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ codigo: 200, estado: "ok", datos: { mensaje: "Servidor activo" } }); //puse para verificar el estado del servidor mas facil
