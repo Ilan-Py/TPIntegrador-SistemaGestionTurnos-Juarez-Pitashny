@@ -101,51 +101,33 @@ const darDeBajaTurno = async (req, res) => {
         const { id } = req.params;
 
         if (!id) {
-            return res.status(400).json({
-                codigo: 400,
-                estado: "Campo requerido vacio",
-                datos: null
-            });
+            return res.status(400).json({ codigo: 400, estado: "Campo requerido vacio", datos: null });
         }
 
         if (req.usuario.rol === "administrador") {
-            return res.status(403).json({
-                codigo: 403,
-                estado: "Rol de usuario no permitido para esta accion",
-                datos: null
-            });
+            return res.status(403).json({ codigo: 403, estado: "Rol de usuario no permitido para esta accion", datos: null });
         };
 
-        const [turnoExiste] = await pool.query("SELECT t.*, a.id_sede FROM turno t INNER JOIN agenda a ON a.id = t.id_agenda WHERE t.id = ? AND t.estado = 'confirmado'", [id]);
+        const [turnoExiste] = await pool.query(
+            "SELECT t.*, a.id_sede FROM turno t INNER JOIN agenda a ON a.id = t.id_agenda WHERE t.id = ? AND t.estado = 'confirmado'",
+            [id]
+        );
 
         if (turnoExiste.length === 0) {
-            return res.status(404).json({
-                codigo: 404,
-                estado: "Turno no encontrado",
-                datos: null });
+            return res.status(404).json({ codigo: 404, estado: "Turno no encontrado", datos: null });
         }
 
         if (req.usuario.rol === "paciente") {
             if (turnoExiste[0].id_paciente !== req.usuario.id) {
-                return res.status(403).json({
-                    codigo: 403,
-                    estado: "No tenés permisos para cancelar este turno",
-                    datos: null
-                    });
-                }
-
-                await pool.query("UPDATE turno SET estado = 'cancelado' WHERE id = ?", [id]);
-            };
+                return res.status(403).json({ codigo: 403, estado: "No tenés permisos para cancelar este turno", datos: null });
+            }
+            await pool.query("UPDATE turno SET estado = 'cancelado' WHERE id = ?", [id]);
+        };
 
         if (req.usuario.rol === "operador" || req.usuario.rol === "medico") {
             if (turnoExiste[0].id_sede !== req.usuario.id_sede) {
-                return res.status(403).json({
-                    codigo: 403,
-                    estado: "No tiene permisos para cancelar un turno de otra sede",
-                    datos: null
-                });
+                return res.status(403).json({ codigo: 403, estado: "No tiene permisos para cancelar un turno de otra sede", datos: null });
             };
-
             await pool.query("UPDATE turno SET estado = 'cancelado' WHERE id = ?", [id]);
         };
 
@@ -159,24 +141,153 @@ const darDeBajaTurno = async (req, res) => {
             codigo: 200,
             estado: "Turno cancelado correctamente",
             datos: {
-                    id: turnoExiste[0].id,
-                    id_sede: turnoExiste[0].id_sede,
-                    nota: turnoExiste[0].nota,
-                    fecha: turnoExiste[0].fecha,
-                    hora: turnoExiste[0].hora,
-                    estado: "cancelado",
-                    id_paciente: turnoExiste[0].id_paciente,
-                    id_cobertura: turnoExiste[0].id_cobertura,
-                    id_agenda: turnoExiste[0].id_agenda
-                } 
+                id: turnoExiste[0].id,
+                id_sede: turnoExiste[0].id_sede,
+                nota: turnoExiste[0].nota,
+                fecha: turnoExiste[0].fecha,
+                hora: turnoExiste[0].hora,
+                estado: "cancelado",
+                id_paciente: turnoExiste[0].id_paciente,
+                id_cobertura: turnoExiste[0].id_cobertura,
+                id_agenda: turnoExiste[0].id_agenda
+            }
         });
 
     } catch(error) {
-        return res.status(500).json({
-            codigo: 500,
-            estado: error.message,
-            datos: null });
+        return res.status(500).json({ codigo: 500, estado: error.message, datos: null });
     };
 };
 
-module.exports = { darAltaTurno, darDeBajaTurno };
+const atenderTurno = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { diagnostico, tratamiento, observaciones } = req.body;
+
+        if (!diagnostico) {
+            return res.status(400).json({ codigo: 400, estado: "El diagnóstico es requerido", datos: null });
+        }
+
+        const [turnoExiste] = await pool.query(
+            "SELECT t.*, a.id_medico FROM turno t INNER JOIN agenda a ON a.id = t.id_agenda WHERE t.id = ? AND t.estado = 'confirmado'",
+            [id]
+        );
+
+        if (turnoExiste.length === 0) {
+            return res.status(404).json({ codigo: 404, estado: "Turno no encontrado o no está confirmado", datos: null });
+        }
+
+        if (turnoExiste[0].id_medico !== req.usuario.id) {
+            return res.status(403).json({ codigo: 403, estado: "Solo podés atender tus propios turnos", datos: null });
+        }
+
+        await pool.query("UPDATE turno SET estado = 'atendido' WHERE id = ?", [id]);
+
+        const [historial] = await pool.query(
+            "INSERT INTO historial_clinico (id_turno, id_medico, id_paciente, diagnostico, tratamiento, observaciones) VALUES (?, ?, ?, ?, ?, ?)",
+            [id, req.usuario.id, turnoExiste[0].id_paciente, diagnostico, tratamiento || null, observaciones || null]
+        );
+
+        const mensaje = `Tu turno del ${formatearFecha(turnoExiste[0].fecha)} a las ${turnoExiste[0].hora} fue atendido. Ya podés consultar tu historial clínico.`;
+        await pool.query(
+            "INSERT INTO notificacion (id_usuario, tipo, mensaje, leida) VALUES (?, 'turno_atendido', ?, 0)",
+            [turnoExiste[0].id_paciente, mensaje]
+        );
+
+        return res.status(200).json({
+            codigo: 200,
+            estado: "ok",
+            datos: {
+                turno_id: id,
+                historial_id: historial.insertId,
+                estado: "atendido"
+            }
+        });
+
+    } catch(error) {
+        return res.status(500).json({ codigo: 500, estado: error.message, datos: null });
+    };
+};
+
+const misTurnos = async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            `SELECT t.id, t.fecha, t.hora, t.estado, t.nota,
+                    u.nombre AS medico_nombre, u.apellido AS medico_apellido,
+                    e.descripcion AS especialidad, s.nombre AS sede
+             FROM turno t
+             JOIN agenda a ON a.id = t.id_agenda
+             JOIN usuario u ON u.id = a.id_medico
+             JOIN especialidad e ON e.id = a.id_especialidad
+             JOIN sede s ON s.id = a.id_sede
+             WHERE t.id_paciente = ?
+             ORDER BY t.fecha ASC, t.hora ASC`,
+            [req.usuario.id]
+        );
+
+        return res.json({ codigo: 200, estado: "ok", datos: rows });
+
+    } catch(error) {
+        return res.status(500).json({ codigo: 500, estado: error.message, datos: null });
+    };
+};
+
+const turnosMedico = async (req, res) => {
+    try {
+        const { fecha } = req.query;
+
+        if (!fecha) {
+            return res.status(400).json({ codigo: 400, estado: "La fecha es requerida", datos: null });
+        }
+
+        const [rows] = await pool.query(
+            `SELECT t.id, t.fecha, t.hora, t.estado, t.nota,
+                    u.nombre AS paciente_nombre, u.apellido AS paciente_apellido,
+                    e.descripcion AS especialidad, s.nombre AS sede
+             FROM turno t
+             JOIN agenda a ON a.id = t.id_agenda
+             JOIN usuario u ON u.id = t.id_paciente
+             JOIN especialidad e ON e.id = a.id_especialidad
+             JOIN sede s ON s.id = a.id_sede
+             WHERE a.id_medico = ? AND t.fecha = ?
+             ORDER BY t.hora ASC`,
+            [req.usuario.id, fecha]
+        );
+
+        return res.json({ codigo: 200, estado: "ok", datos: rows });
+
+    } catch(error) {
+        return res.status(500).json({ codigo: 500, estado: error.message, datos: null });
+    };
+};
+
+const turnosSede = async (req, res) => {
+    try {
+        const { fecha } = req.query;
+
+        if (!fecha) {
+            return res.status(400).json({ codigo: 400, estado: "La fecha es requerida", datos: null });
+        }
+
+        const [rows] = await pool.query(
+            `SELECT t.id, t.fecha, t.hora, t.estado, t.nota,
+                    p.nombre AS paciente_nombre, p.apellido AS paciente_apellido,
+                    m.nombre AS medico_nombre, m.apellido AS medico_apellido,
+                    e.descripcion AS especialidad
+             FROM turno t
+             JOIN agenda a ON a.id = t.id_agenda
+             JOIN usuario p ON p.id = t.id_paciente
+             JOIN usuario m ON m.id = a.id_medico
+             JOIN especialidad e ON e.id = a.id_especialidad
+             WHERE a.id_sede = ? AND t.fecha = ?
+             ORDER BY t.hora ASC`,
+            [req.usuario.id_sede, fecha]
+        );
+
+        return res.json({ codigo: 200, estado: "ok", datos: rows });
+
+    } catch(error) {
+        return res.status(500).json({ codigo: 500, estado: error.message, datos: null });
+    };
+};
+
+module.exports = { darAltaTurno, darDeBajaTurno, atenderTurno, misTurnos, turnosMedico, turnosSede };
