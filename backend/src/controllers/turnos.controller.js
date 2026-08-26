@@ -96,4 +96,87 @@ const darAltaTurno = async (req, res) => {
     }
 };
 
-module.exports = { darAltaTurno };
+const darDeBajaTurno = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                codigo: 400,
+                estado: "Campo requerido vacio",
+                datos: null
+            });
+        }
+
+        if (req.usuario.rol === "administrador") {
+            return res.status(403).json({
+                codigo: 403,
+                estado: "Rol de usuario no permitido para esta accion",
+                datos: null
+            });
+        };
+
+        const [turnoExiste] = await pool.query("SELECT t.*, a.id_sede FROM turno t INNER JOIN agenda a ON a.id = t.id_agenda WHERE t.id = ? AND t.estado = 'confirmado'", [id]);
+
+        if (turnoExiste.length === 0) {
+            return res.status(404).json({
+                codigo: 404,
+                estado: "Turno no encontrado",
+                datos: null });
+        }
+
+        if (req.usuario.rol === "paciente") {
+            if (turnoExiste[0].id_paciente !== req.usuario.id) {
+                return res.status(403).json({
+                    codigo: 403,
+                    estado: "No tenés permisos para cancelar este turno",
+                    datos: null
+                    });
+                }
+
+                await pool.query("UPDATE turno SET estado = 'cancelado' WHERE id = ?", [id]);
+            };
+
+        if (req.usuario.rol === "operador" || req.usuario.rol === "medico") {
+            if (turnoExiste[0].id_sede !== req.usuario.id_sede) {
+                return res.status(403).json({
+                    codigo: 403,
+                    estado: "No tiene permisos para cancelar un turno de otra sede",
+                    datos: null
+                });
+            };
+
+            await pool.query("UPDATE turno SET estado = 'cancelado' WHERE id = ?", [id]);
+        };
+
+        const mensaje = `Tu turno del ${formatearFecha(turnoExiste[0].fecha)} a las ${turnoExiste[0].hora} fue cancelado.`;
+        await pool.query(
+            "INSERT INTO notificacion (id_usuario, tipo, mensaje, leida) VALUES (?, 'turno_cancelado', ?, 0)",
+            [turnoExiste[0].id_paciente, mensaje]
+        );
+
+        return res.status(200).json({
+            codigo: 200,
+            estado: "Turno cancelado correctamente",
+            datos: {
+                    id: turnoExiste[0].id,
+                    id_sede: turnoExiste[0].id_sede,
+                    nota: turnoExiste[0].nota,
+                    fecha: turnoExiste[0].fecha,
+                    hora: turnoExiste[0].hora,
+                    estado: "cancelado",
+                    id_paciente: turnoExiste[0].id_paciente,
+                    id_cobertura: turnoExiste[0].id_cobertura,
+                    id_agenda: turnoExiste[0].id_agenda
+                } 
+        });
+
+    } catch(error) {
+        return res.status(500).json({
+            codigo: 500,
+            estado: error.message,
+            datos: null });
+    };
+};
+
+module.exports = { darAltaTurno, darDeBajaTurno };
