@@ -4,7 +4,7 @@ const { verificarToken, verificarRol } = require("../middlewares/auth.middleware
 
 const router = Router();
 
-router.post("/",      verificarToken, verificarRol("paciente", "operador"), darAltaTurno);
-router.delete("/",    verificarToken, verificarRol("paciente", "operador", "medico"), darDeBajaTurno);
+router.post("/altaTurno",      verificarToken, verificarRol("paciente", "operador"), darAltaTurno);
+router.post("/bajaTurno",    verificarToken, verificarRol("paciente", "operador", "medico"), darDeBajaTurno);
 
 module.exports = router;

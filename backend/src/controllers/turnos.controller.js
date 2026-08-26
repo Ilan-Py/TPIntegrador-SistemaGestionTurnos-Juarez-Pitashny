@@ -1,7 +1,15 @@
 const pool = require("../database/database");
 
-const formatearFecha = (fechaISO) => {
-    const [anio, mes, dia] = fechaISO.split("-");
+const formatearFecha = (fecha) => {
+    if (fecha instanceof Date) {
+        const dia = String(fecha.getDate()).padStart(2, "0");
+        const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+        const anio = fecha.getFullYear();
+
+        return `${dia}/${mes}/${anio}`;
+    }
+
+    const [anio, mes, dia] = fecha.split("-");
     return `${dia}/${mes}/${anio}`;
 };
 
@@ -98,7 +106,7 @@ const darAltaTurno = async (req, res) => {
 
 const darDeBajaTurno = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.body;
 
         if (!id) {
             return res.status(400).json({
