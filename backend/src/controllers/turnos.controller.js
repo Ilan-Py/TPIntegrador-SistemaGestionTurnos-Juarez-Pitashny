@@ -1,9 +1,15 @@
 const pool = require("../database/database");
 
+const formatearFecha = (fechaISO) => {
+    const [anio, mes, dia] = fechaISO.split("-");
+    return `${dia}/${mes}/${anio}`;
+};
+
 const darAltaTurno = async (req, res) => {
     try {
         const { id_medico, id_especialidad, id_sede, fecha, hora, nota } = req.body;
-        let { id_paciente, id_cobertura } = req.body;
+
+        let { id_paciente } = req.body;
 
         if (!id_medico || !id_especialidad || !id_sede || !fecha || !hora) {
             return res.status(400).json({ codigo: 400, estado: "Todos los campos son requeridos", datos: null });
@@ -30,9 +36,7 @@ const darAltaTurno = async (req, res) => {
             return res.status(400).json({ codigo: 400, estado: "El id_paciente indicado no corresponde a un paciente existente", datos: null });
         }
 
-        if (!id_cobertura) {
-            id_cobertura = pacientes[0].id_cobertura;
-        }
+        const id_cobertura = pacientes[0].id_cobertura;
 
         if (!id_cobertura) {
             return res.status(400).json({ codigo: 400, estado: "El paciente no tiene una cobertura asignada", datos: null });
@@ -54,7 +58,7 @@ const darAltaTurno = async (req, res) => {
         }
 
         const [ocupado] = await pool.query(
-            "SELECT id FROM turno WHERE id_agenda = ? AND fecha = ? AND hora = ? AND estado != 'cancelado'",
+            "SELECT id FROM turno WHERE id_agenda = ? AND fecha = ? AND hora = ? AND estado = 'confirmado'",
             [agenda.id, fecha, hora]
         );
 
@@ -65,6 +69,12 @@ const darAltaTurno = async (req, res) => {
         const [result] = await pool.query(
             "INSERT INTO turno (nota, id_agenda, fecha, hora, id_paciente, id_cobertura, estado) VALUES (?, ?, ?, ?, ?, ?, 'confirmado')",
             [nota.trim(), agenda.id, fecha, hora, id_paciente, id_cobertura]
+        );
+
+        const mensaje = `Tu turno del ${formatearFecha(fecha)} a las ${hora} fue confirmado.`;
+        await pool.query(
+            "INSERT INTO notificacion (id_usuario, tipo, mensaje, leida) VALUES (?, 'turno_confirmado', ?, 0)",
+            [id_paciente, mensaje]
         );
 
         return res.status(201).json({
