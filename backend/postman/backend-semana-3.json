@@ -1,0 +1,731 @@
+{
+  "info": {
+    "_postman_id": "c3103c58-fd9c-4822-928d-92105cd907b4",
+    "name": "TP Integrador - Backend Semana 3",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47962904",
+    "_collection_link": "https://go.postman.co/collection/47962904-c3103c58-fd9c-4822-928d-92105cd907b4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "LOGIN",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.datos && res.datos.token) { pm.environment.set('token', res.datos.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dni\": \"00000001\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Medico",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.datos && res.datos.token) { pm.environment.set('token', res.datos.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dni\": \"00000002\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.datos && res.datos.token) { pm.environment.set('token', res.datos.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dni\": \"00000003\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Paciente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.datos && res.datos.token) { pm.environment.set('token', res.datos.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dni\": \"00000004\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "TURNOS",
+      "item": [
+        {
+          "name": "Alta de turno (paciente)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_medico\": 3,\n  \"id_especialidad\": 1,\n  \"id_sede\": 1,\n  \"fecha\": \"2025-10-20\",\n  \"hora\": \"15:00\",\n  \"nota\": \"Consulta de control\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/turnos/altaTurno",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "altaTurno"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alta de turno fuera de horario (espera 400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_medico\": 3,\n  \"id_especialidad\": 1,\n  \"id_sede\": 1,\n  \"fecha\": \"2025-10-20\",\n  \"hora\": \"08:00\",\n  \"nota\": \"Turno fuera de horario\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/turnos/altaTurno",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "altaTurno"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alta de turno operador (por paciente)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_medico\": 3,\n  \"id_especialidad\": 1,\n  \"id_sede\": 1,\n  \"fecha\": \"2025-10-20\",\n  \"hora\": \"16:00\",\n  \"id_paciente\": 2,\n  \"nota\": \"Turno cargado por operador\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/turnos/altaTurno",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "altaTurno"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mis turnos (paciente)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/turnos/mis-turnos",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "mis-turnos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Turnos medico por fecha",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/turnos/medico?fecha=2025-10-20",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "medico"
+              ],
+              "query": [
+                {
+                  "key": "fecha",
+                  "value": "2025-10-20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Turnos sede por fecha (operador)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/turnos/sede?fecha=2025-10-20",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "sede"
+              ],
+              "query": [
+                {
+                  "key": "fecha",
+                  "value": "2025-10-20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar turno",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/turnos/bajaTurno/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "bajaTurno",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar turno de otra sede (espera 403)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/turnos/bajaTurno/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "bajaTurno",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atender turno (medico)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/turnos/2/atender",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "2",
+                "atender"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atender turno de otro medico (espera 403)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/turnos/1/atender",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "turnos",
+                "1",
+                "atender"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "HISTORIAL",
+      "item": [
+        {
+          "name": "Registrar historial (medico)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diagnostico\": \"Esguince de tobillo grado I\",\n  \"tratamiento\": \"Reposo y antiinflamatorios\",\n  \"observaciones\": \"Control en 15 dias\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/historial/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "historial",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar historial turno no atendido (espera 404)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diagnostico\": \"Prueba\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:4000/historial/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "historial",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver historial paciente (paciente ve el suyo)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/historial/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "historial",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver historial de otro paciente (espera 403)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/historial/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "historial",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver historial paciente (medico ve solo los suyos)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/historial/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "historial",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "NOTIFICACIONES",
+      "item": [
+        {
+          "name": "Listar mis notificaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/notificaciones",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "notificaciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Marcar notificacion como leida",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/notificaciones/1/leer",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "notificaciones",
+                "1",
+                "leer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Marcar notificacion de otro usuario (espera 403)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "localhost:4000/notificaciones/2/leer",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "notificaciones",
+                "2",
+                "leer"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

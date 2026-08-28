@@ -113,7 +113,7 @@ INSERT INTO `agenda` (`id`, `hora_entrada`, `hora_salida`, `fecha`, `id_medico`,
 
 CREATE TABLE `turno` (
   `id` tinyint(4) NOT NULL,
-  `nota` varchar(40) DEFAULT NULL,
+  `nota` varchar(55) DEFAULT NULL,
   `id_agenda` tinyint(11) NOT NULL,
   `fecha` date DEFAULT NULL,
   `hora` varchar(5) DEFAULT NULL,
