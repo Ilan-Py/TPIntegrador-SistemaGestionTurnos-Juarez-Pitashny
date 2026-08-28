@@ -158,14 +158,11 @@ const darDeBajaTurno = async (req, res) => {
     };
 };
 
+//--Solo cambia el estado a atendido y genera notificacion--
+//--El historial se carga por separado con POST /:id/historial--
 const atenderTurno = async (req, res) => {
     try {
         const { id } = req.params;
-        const { diagnostico, tratamiento, observaciones } = req.body;
-
-        if (!diagnostico) {
-            return res.status(400).json({ codigo: 400, estado: "El diagnóstico es requerido", datos: null });
-        }
 
         const [turnoExiste] = await pool.query(
             "SELECT t.*, a.id_medico FROM turno t INNER JOIN agenda a ON a.id = t.id_agenda WHERE t.id = ? AND t.estado = 'confirmado'",
@@ -182,11 +179,6 @@ const atenderTurno = async (req, res) => {
 
         await pool.query("UPDATE turno SET estado = 'atendido' WHERE id = ?", [id]);
 
-        const [historial] = await pool.query(
-            "INSERT INTO historial_clinico (id_turno, id_medico, id_paciente, diagnostico, tratamiento, observaciones) VALUES (?, ?, ?, ?, ?, ?)",
-            [id, req.usuario.id, turnoExiste[0].id_paciente, diagnostico, tratamiento || null, observaciones || null]
-        );
-
         const mensaje = `Tu turno del ${formatearFecha(turnoExiste[0].fecha)} a las ${turnoExiste[0].hora} fue atendido. Ya podés consultar tu historial clínico.`;
         await pool.query(
             "INSERT INTO notificacion (id_usuario, tipo, mensaje, leida) VALUES (?, 'turno_atendido', ?, 0)",
@@ -198,7 +190,6 @@ const atenderTurno = async (req, res) => {
             estado: "ok",
             datos: {
                 turno_id: id,
-                historial_id: historial.insertId,
                 estado: "atendido"
             }
         });
