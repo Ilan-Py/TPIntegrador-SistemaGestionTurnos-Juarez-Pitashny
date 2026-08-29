@@ -36,6 +36,23 @@ Cada carpeta tiene su propio README con instrucciones específicas.
 
 ## Changelog
 
+### [Semana 3] — Backend: Turnos, historial clínico y notificaciones
+#### Agregado
+- Endpoint de alta de turno para paciente (u operador en su representación)
+  - Validación de disponibilidad contra la agenda del médico (horario y superposición con turnos confirmados)
+  - Cobertura del turno tomada automáticamente del paciente, sin poder pisarse desde el body
+- Endpoint de cancelación de turno propio (rol `paciente`) o de la sede (roles `operador`, `medico`)
+- Endpoint de atención de turno por parte del médico, con carga asociada del historial clínico
+  - El médico solo puede atender sus propios turnos confirmados
+- Endpoint de consulta de historial clínico
+  - El paciente ve la totalidad de su propio historial
+  - El médico ve únicamente los registros de los turnos que él mismo atendió
+- Sistema de notificaciones internas, generadas automáticamente ante alta, cancelación y atención de un turno
+  - Endpoint de listado de notificaciones propias, de más reciente a más antigua
+  - Endpoint para marcar una notificación propia como leída
+- Listados de turnos: por paciente (`mis-turnos`), por médico y fecha, y por sede y fecha (para el operador)
+- Colección Postman `backend/postman/backend-semana-3.json`
+
 ### [Semana 2] — Backend: CRUD de sedes, especialidades, coberturas y agenda
 #### Agregado
 - CRUD completo de sedes — solo rol `administrador`
