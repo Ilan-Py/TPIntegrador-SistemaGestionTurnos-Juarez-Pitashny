@@ -12,7 +12,7 @@ const especialidadRoutes = require("./routes/especialidad.routes");
 const turnoRoutes = require("./routes/turnos.routes");
 const historialRoutes = require("./routes/historial.routes");
 const notificacionesRoutes = require("./routes/notificaciones.routes");
-const reportesYStadisticasRoutes = require("./routes/reportesYStadisticas.routes");
+const reportesYEstadisticasRoutes = require("./routes/reportesYEstadisticas.routes");
 
 const app = express();
 
@@ -30,7 +30,7 @@ app.use("/especialidades", especialidadRoutes);
 app.use("/turnos", turnoRoutes);
 app.use("/historial", historialRoutes);
 app.use("/notificaciones", notificacionesRoutes);
-app.use("/reportesYStadisticas", reportesYStadisticasRoutes);
+app.use("/reportesYEstadisticas", reportesYEstadisticasRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ codigo: 200, estado: "ok", datos: { mensaje: "Servidor activo" } }); //puse para verificar el estado del servidor mas facil
