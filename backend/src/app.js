@@ -13,6 +13,7 @@ const turnoRoutes = require("./routes/turnos.routes");
 const historialRoutes = require("./routes/historial.routes");
 const notificacionesRoutes = require("./routes/notificaciones.routes");
 const reportesYEstadisticasRoutes = require("./routes/reportesYEstadisticas.routes");
+const logRoutes = require("./routes/log.routes");
 
 const app = express();
 
@@ -31,7 +32,7 @@ app.use("/turnos", turnoRoutes);
 app.use("/historial", historialRoutes);
 app.use("/notificaciones", notificacionesRoutes);
 app.use("/reportesYEstadisticas", reportesYEstadisticasRoutes);
-
+app.use("/logs", logRoutes);
 app.get("/health", (req, res) => {
   res.json({ codigo: 200, estado: "ok", datos: { mensaje: "Servidor activo" } }); //puse para verificar el estado del servidor mas facil
 });
